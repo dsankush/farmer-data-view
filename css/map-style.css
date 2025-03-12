@@ -1,0 +1,504 @@
+body {
+    background: linear-gradient(to bottom, #d9f0f7, #a6d1e6); /* Light gradient mimicking sky or water */
+    background-image: url('../bg_image/map_bg.jpg'); /* Path to your background image */
+    background-size: cover; /* Ensure the image covers the screen */
+    background-attachment: fixed; /* Keep the background fixed during scrolling */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    margin: 0; /* Remove default browser margin */
+    padding: 0; /* Remove default browser padding */
+}
+svg text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    fill: black; /* Text color */
+    text-anchor: middle; /* Center align the labels */
+    pointer-events: none; /* Prevent text from interfering with map interactions */
+    font-weight: bold; /* Optional: Make text bold */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Optional: Add text shadow */
+}
+
+#main-heading {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 3px solid #38b6ff;
+    width: fit-content;
+    padding: 10px 0; /* Compact padding */
+    position: absolute; /* Position it on top of the map */
+    top: 20px; /* Space from the top of the page */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure perfect centering */
+    z-index: 10; /* Keep it above the map */
+}
+
+
+html, body {
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    height: 100%; /* Full height for the background */
+
+    /* Background properties */
+    background: linear-gradient(to bottom, #d9f0f7, #a6d1e6), 
+                url('../bg_image/bg.jpg'); /* Gradient with image */
+    background-size: cover; /* Ensure the image covers the screen */
+    background-attachment: fixed; /* Keep the background static during scroll */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+}
+#mapwrapper {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 1920px;
+    margin: 0 auto; /* Center the map horizontally */
+    padding: 0;
+    background: none; /* Removes the blue background */
+    /* OR use transparency */
+    background-color: rgba(0, 0, 0, 0); /* Transparent background */
+    /* Keep other styles */
+    width: 100%; 
+    height: 100%;
+    position: relative;
+    min-width: 220px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* Center the map vertically and horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px); /* Full viewport height minus the heading's height */
+    width: 100%; /* Full width */
+    position: relative;
+    overflow: hidden; /* Prevent extra scrolling */
+}
+#visnames {
+  font-size: 16px;
+}
+#mapbase svg {
+  width: 100%; /* Take full width of the container */
+  height: auto; /* Maintain aspect ratio */
+  max-width: none; /* Ensure no cropping from parent container */
+  max-height: none; /* Ensure no cropping from parent container */
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3)); /* Add shadow */
+  cursor: grab; /* Indicate panning functionality */
+  transform:  rotateX(15deg) rotateY(-15deg); /* Optional for zooming effect */
+  transition: center;
+
+
+}
+
+@media screen and (max-width: 768px) {
+  #mapwrapper {
+    height: 500px; /* Adjust height for smaller screens */
+    width: 90%; /* Take up 90% of the screen width */
+  }
+}
+
+#mapbase path {
+  position: relative;
+
+  stroke: #ff9757; /* Darker boundary for contrast */
+  stroke-width: 1.5; /* Slightly thicker boundaries */
+  fill-opacity: 0.85; /* Slight transparency for fill colors */
+  transition: fill 0.3s ease, stroke-width 0.3s ease; /* Smooth transitions */
+}
+
+#mapbase path:hover {
+  stroke-width: 3px; /* Highlight boundaries on hover */
+  stroke: #000;
+  fill-opacity: 1; /* Make the state stand out on hover */
+  filter: drop-shadow(0 0 10px #00ff00); /* Add a neon green glow */
+  transform: scale(1); /* Scale the state */
+  z-index: 10; /* Bring to the front */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);/* Add shadow for pop-up effect */
+  fill: #ffd700; /* Optional: Change the fill color on hover */
+}
+
+
+#tryjstip {   /*Hover Box Designing*/
+  font: 14px/16px Trebuchet MS, Helvetica, Arial, sans-serif;
+  display: none;
+  max-width: 40%;
+  padding: 5px;
+  border: 1px solid #404040;
+  border-radius: 5px; /* Rounded corners */
+  color: #404040;
+  z-index: 1000;
+  float: left;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  word-break: keep-all;
+  box-shadow:2px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow */
+    -moz-box-shadow:1px 2px 4px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow:1px 2px 4px rgba(0, 0, 0, 0.5);
+    
+}
+
+#tryjstip table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+
+
+#tryjstip th, #tryjstip td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+
+#tryjstip th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+
+#tryjstip p {
+  margin: 0!important;
+  color: #404040!important;
+}
+#tryjstip img {
+  float: left;
+  padding: 3px;
+  max-width: 100%;
+}
+@media screen and (max-width: 1920px) {
+  #mapwrapper {
+    max-width: 130%;
+  }
+}
+@media screen and (max-width: 400px) and (min-width: 321px) {
+  #mapbase svg {
+    height:320px;
+  }
+}
+@media screen and (max-width: 480px) and (min-width: 401px) {
+  #mapbase svg {
+    height:400px;
+  }
+}
+@media screen and (max-width: 568px) and (min-width: 481px) {
+  #mapbase svg {
+    height:480px;
+  }
+}
+@media screen and (max-width: 685px) and (min-width: 569px) {
+  #mapbase svg {
+    height:550px;
+  }
+}
+@media screen and (max-width: 767px) and (min-width: 686px) {
+  #mapbase svg {
+    height:560px;
+  }
+}
+@media screen and (min-width: 768px) {
+  #mapbase svg {
+    height:590px;
+  }
+}
+
+#tryjs1 {
+  fill: url(#grad1); /* Reference gradient ID */
+}
+
+
+#tryjs2 {
+  fill: url(#gradientFill);;
+}
+
+/* Define the gradients */
+<svg>
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color: #A1D6E2; stop-opacity: 1;" />
+      <stop offset="100%" style="stop-color: #1995AD; stop-opacity: 1;" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color: #FFC857; stop-opacity: 1;" />
+      <stop offset="100%" style="stop-color: #E9724C; stop-opacity: 1;" />
+    </linearGradient>
+  </defs>
+</svg>
+
+
+
+#tryjs3 {
+  fill: red;
+}
+
+#zoom-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#zoom-controls button {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Button Styling */
+#resetZoom {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  padding: 10px 15px;
+  background: linear-gradient(45deg, #3498db, #9b59b6); /* Gradient background */
+  color: #fff;
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+
+#resetZoom i {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+#resetZoom:hover {
+  background: linear-gradient(45deg, #2980b9, #8e44ad);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+#resetZoom:active {
+  transform: scale(0.96);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  #resetZoom {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  #resetZoom i {
+    font-size: 16px;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#resetZoom:active i {
+  animation: rotate 0.5s linear;
+}
+
+
+<-- Legend -->
+
+#mapLegend {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  z-index: 10; /* Ensure the legend is above the map */
+}
+
+#mapLegend div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+#mapLegend span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+<-- Spiiner -->
+
+#loadingSpinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#infoBox {
+  position: fixed;
+  top: 10%;
+  left: 2%;
+  width: 250px;
+  height: 300px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ccc;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+#infoList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  animation: scrollText 10s linear infinite; /* Adjust speed here */
+}
+
+#infoList li {
+  padding: 5px 0;
+  color: #333;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+/* Enhanced Info Box */
+#enhancedInfoBox {
+  position: fixed;
+  top: 10%;
+  left: 2%;
+  width: 300px;
+  height: 400px;
+  background: linear-gradient(135deg, #ffffff, #f0f8ff);
+  border: 1px solid #dcdcdc;
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#enhancedInfoBox h3 {
+  margin: 0;
+  padding: 12px 16px;
+  background: #4caf50;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+#enhancedInfoListContainer {
+  height: calc(100% - 50px); /* Adjust to ensure it doesn't overlap the heading */
+  overflow: hidden; /* Prevent overflow outside the box */
+  padding: 10px 0;
+}
+
+#enhancedInfoList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 16px;
+  animation: enhancedScroll 15s linear infinite;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.infoItem:hover {
+  transform: scale(1.05);
+  background: #e6ffe6;
+}
+
+.infoIcon {
+  font-size: 18px;
+  color: #4caf50;
+}
+
+/* Scroll Animation */
+@keyframes enhancedScroll {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+#top-banner {
+  height: 150px; /* Adjust the height as needed */
+  background-image: url('your-background-image.jpg'); /* Add an image */
+  background-size: cover; /* Ensure the image covers the entire div */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Avoid repeating the image */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+  color: white; /* Text color */
+  font-size: 24px; /* Text size */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add text shadow */
+}
+
+/* THIS IS TO HIDE AN AREA IF NEEDED
+#tryjs2, #tryjsvn2 {
+  display: none;
+}*/
